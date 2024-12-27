@@ -1,0 +1,12 @@
+../Core/Src/main.c:119:5:main	9
+../Core/Src/main.c:268:6:SystemClock_Config	3
+../Core/Src/main.c:315:13:MX_TIM3_Init	9
+../Core/Src/main.c:386:13:MX_TIM4_Init	6
+../Core/Src/main.c:512:13:MX_GPIO_Init	1
+../Core/Src/main.c:552:6:servo_Init	1
+../Core/Src/main.c:590:6:mathmatics	1
+../Core/Src/main.c:689:6:move_direction	37
+../Core/Src/main.c:920:6:MX_GPIO_LED_ON	1
+../Core/Src/main.c:924:6:MX_GPIO_LED_OFF	1
+../Core/Src/main.c:931:6:esp_event	12
+../Core/Src/main.c:1160:6:Error_Handler	1
