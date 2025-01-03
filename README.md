@@ -10,23 +10,86 @@
 ### 주요 구성 요소 및 동작 원리
 
 #### 1. **Color Detection** (`color-detector.py`)
-- **역할**: OpenCV를 사용해 중앙 사각형 영역에서 색상을 분석.
-- **세부 동작**:
-  - 카메라의 중앙 영역에서 ROI(Region of Interest) 정의.
-  - HSV 색 공간을 사용하여 Red, Green, Blue를 감지.
-  - 색상 감지 시, 감지 시간을 기록하고 `ObjectDetection` 테이블에 저장.
+## 주요 기능
+1. **YOLO 모델 기반 객체 탐지**
+   - Yolo11n 기반 Fine-Tuning 모델(`color.pt`)을 로드하여 세 개의 병뚜껑을 감지지
+   - 클래스 ID와 Confidence를 필터링
 
-```python
-# 예시: 색상 감지 및 데이터베이스 삽입
-color = detect_color(frame)
-if color:
-    insert_to_db(color)
-```
+2. **실시간 웹캠 스트림 분석**
+   - 중앙에 고정된 바운딩 박스를 설정하여 감지 영역 제한한
+   - 실시간으로 탐지된 객체를 화면에 표시
+
+3. **MariaDB 연동**
+   - 탐지된 객체 정보를 MariaDB 데이터베이스에 저장
+   - 데이터베이스 테이블 `ObjectDetection`에 색상 정보와 타임스탬프를 저장
 
 - **데이터베이스 저장 형식**:
   - 컬럼: `Color`, `CameraTimestamp`
   - 예: `Red, 2025-01-01 10:20:30`
 
+## 코드 구성
+
+### 1. YOLO 모델 초기화
+```python
+from ultralytics import YOLO
+model = YOLO("color.pt")
+```
+- `color.pt`: YOLO 모델 파일.
+
+### 2. MariaDB 연결
+```python
+conn = pymysql.connect(
+    host='localhost',
+    port=3306,
+    user='iot',
+    password='pwiot',
+    database='iotdb'
+)
+cursor = conn.cursor()
+```
+- 데이터베이스 연결을 설정하고 쿼리를 실행하기 위한 Cursor 객체를 생성
+
+### 3. 객체 탐지
+- 객체 탐지는 0.5초 간격으로 진행
+- 마지막 감지 시간과 현재 감지 시간의 차를 이용하여 무분별한 탐지, DB저장 방지
+```python
+if current_time - last_detection_time > 0.5:
+        results = model.predict(
+            roi,
+            verbose=False,
+            imgsz=(640, 480),  # 고정된 이미지 크기
+            device="cuda"  # CUDA 사용
+        )
+```
+
+### 4. 객체 탐지 및 데이터베이스 저장
+- 객체 탐지 로직은 ROI(Region of Interest)를 기준으로 YOLO 모델 추론을 수행
+- 클래스 ID와 Confidence 조건을 만족하는 객체만 탐지 결과로 처리
+
+```python
+if class_id in TARGET_CLASSES and confidence >= CONFIDENCE_THRESHOLD:
+    detected_class = model.names[class_id]
+    insert_to_db(detected_class)
+```
+
+### 5. 데이터베이스 저장 함수
+```python
+def insert_to_db(color):
+    timestamp = datetime.now()
+    query = "INSERT INTO ObjectDetection (Color, CameraTimestamp) VALUES (%s, %s)"
+    cursor.execute(query, (color, timestamp))
+    conn.commit()
+```
+- 탐지된 객체의 색상 및 타임스탬프를 데이터베이스 테이블에 저장
+
+
+## 주요 변수
+- **`TARGET_CLASSES`**: 객체의 클래스 ID 리스트 ([0, 1, 2]).
+- **`CONFIDENCE_THRESHOLD`**: 최소 Confidence 값 (기본값: 0.5).
+- **`BOX_WIDTH`, `BOX_HEIGHT`**: 관심 영역의 크기 (200x200).
+
+### 바운딩 박스를 지정하여 바운딩 박스에 들어온 물체를 감지
+![alt text](<img/감지 영역.png>)
 ---
 
 #### 2. **Bluetooth Communication** (`iot_client_bluetooth.c`)
