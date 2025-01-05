@@ -142,10 +142,10 @@ void esp_event(char * recvBuf)
 pToken = strtok(recvBuf,"[@]");
 while(pToken != NULL)
 {
-pArray[i] = pToken;
-if(++i >= ARR_CNT)
-    break;
-pToken = strtok(NULL,"[@]");
+    pArray[i] = pToken;
+    if(++i >= ARR_CNT)
+        break;
+    pToken = strtok(NULL,"[@]");
 }
 ```
 - 받은 내용을 [@]로 분할하여 배열에 저장
