@@ -61,7 +61,7 @@
 ### [컨트롤 서버](server)
 
 ## 발표 자료
-### [바로 가기](Project_SmartFactory.pdf)
+### [발표 자료 바로 가기](Project_SmartFactory.pdf)
 
 ## 시연 영상
 
