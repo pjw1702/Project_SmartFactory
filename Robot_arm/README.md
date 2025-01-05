@@ -44,6 +44,7 @@
     - TIM3, TIM4 사용 : 모터 PWM 구현을 위한 TIMER 설정
     - Global Interrupt를 위한 Button Interrupt 설정
 
+---
 
 ## 코드를 통한 기구학식 및 움직임 구현
 
@@ -105,12 +106,15 @@ else if(m_servo1_pwm < servo1_init_pwm)
 
 }
 
-...
+....
 ```
 - 움직임과 간섭을 최소화 하기 위해서 모터의 움직임 순서를 결정
 - 움직임 순서 : 감지된 물체 잡기 -> 안전지대로 복귀 -> 물체를 요구되는 자리에 넣기 -> 안전지대로 복귀
 - 급작스러운 움직임을 막기 위하여 for문을 사용하여 움직임 구현
 
+---
+
+## Client 구현 및 데이터 송수신을 위한 코드
 ### 서버에 접속하기 위한 Client
 ```C
 #define SSID "내부망 ID"
@@ -171,6 +175,53 @@ else if(!strcmp(pArray[1],"1"))
     }
 
 ....
+}
 ```
 - 수신받은 처리된 데이터를 조건식으로 구성
 - 로봇의 상태와 결과를 나타내는 Buffer를 생성하고 이를 서버에 전송
+
+```C
+void esp_send_data(char *data)
+{
+	char at_cmd[MAX_ESP_COMMAND_LEN] = {0, };
+    uint16_t length = 0;
+	sprintf(at_cmd,"AT+CIPSEND=%d\r\n",strlen(data));
+	if(esp_at_command((uint8_t *)at_cmd,(uint8_t *)response, &length, 1000) == 0)
+	{
+        esp_at_command((uint8_t *)data,(uint8_t *)response, &length, 1000);
+	}
+}
+```
+- AT Command로 전송하기 위해서 저장된 Buffer를 AT Commend 형식으로 변경
+- Buffer를 ESP8266을 통하여 서버에 전송하 전 전송상태를 확인하는 코드
+
+```C
+static int esp_at_command(uint8_t *cmd, uint8_t *resp, uint16_t *length, int16_t time_out)
+{
+
+....
+
+    if(HAL_UART_Transmit(&huart6, cmd, strlen((char *)cmd), 100) != HAL_OK)
+        return -1;
+        
+    while(time_out > 0)
+    {
+        if(cb_data.length >= MAX_UART_RX_BUFFER)
+            return -2;
+        else if(strstr((char *)cb_data.buf, "ERROR") != NULL)
+            return -3;
+        else if(strstr((char *)cb_data.buf, "OK") != NULL)
+        {
+            memcpy(resp, cb_data.buf, cb_data.length);
+            *length = cb_data.length;
+            break;
+        }
+        time_out -= 10;
+        HAL_Delay(10);
+    }
+
+....
+
+}
+```
+- Buffer에 있는 내용을 서버로 전송하기 위한 코드
