@@ -69,5 +69,5 @@
 ![alt text](video/작동영상1.gif)
 ### [로봇팔 & 컨베이어벨트2](https://drive.google.com/file/d/1w4grHQpeCaMg4fAdjgQY6EStmskDzxIA/view?usp=sharing)
 ![alt text](video/작동영상2.gif)
-### [IoT 통신 흐름](https://drive.google.com/file/d/17waCxktosJ9V_y985C_oVpkVcpO-9b_F/view?usp=sharing)
+### [IoT 통신 흐름](https://drive.google.com/file/d/1krKenGNmB7tOQRbzUqb3nnTFdekrQnlu/view?usp=sharing)
 ![alt text](video/작동정리.gif)
