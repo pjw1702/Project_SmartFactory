@@ -367,7 +367,7 @@ $ uname -r
 
 만일 지원하는 버전과 다른 버전의 커널에서 드라이버를 적재하려 하면, 아래와 같은 에러가 발생합니다.
 ```bash
-$ sudo intsmod net_dev.ko
+$ sudo insmod net_dev.ko
 insmod: ERROR: could not insert module net_dev.ko: Invalid module format
 ```
 
@@ -388,11 +388,6 @@ $ sudo insmod net_dev.ko
 ```bash
 $ ./net_app ledVal=0xff timeVal=100
 ```
-
-```bash
-gcc -o load_average_test_3 load_average_test_3.c -ljson-c -liperf -L/usr/local/lib -lnl-3 -lnl-genl-3 -I/usr/include/libnl3
-```
-
 
 <br>
 
