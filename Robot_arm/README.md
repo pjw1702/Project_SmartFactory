@@ -21,11 +21,6 @@
 
 ---
 
-## 기구학 구현
-<img src="./Image/robot_kinetic_vector.jpg">
-
-- 위의 그림과 같이 벡터를 사용하여 End Effect 좌표를 가지고 각 서보의 각도를 계산하는 수식 정의.
-
 ## 하드웨어 구성
 
 <img src="./Image/robot_stm32_circuit.jpg" width="50%" height="50%">
@@ -43,6 +38,13 @@
     - UART6: esp8266 연결을 위한 GPIO 설정 (Baudrate 115200)
     - TIM3, TIM4 사용 : 모터 PWM 구현을 위한 TIMER 설정
     - Global Interrupt를 위한 Button Interrupt 설정
+
+---
+
+## 기구학 구현
+<img src="./Image/robot_kinetic_vector.jpg">
+
+- 위의 그림과 같이 벡터를 사용하여 End Effect 좌표를 가지고 각 서보의 각도를 계산하는 수식 정의.
 
 ---
 
