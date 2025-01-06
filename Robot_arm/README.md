@@ -28,7 +28,7 @@
 - 부품 구성
     - STM32F411RE (STM32 Coretex-M4)
     - 18650 (3.7V 리튬이온 배터리) 2EA
-    - 330uF 커패시터
+    - 470uF 커패시터
     - esp8266 (WIFI 모듈)
     - Push Button 4EA
     - 4 DOF Robot Arm (Servo Motor : SG90 5EA)
