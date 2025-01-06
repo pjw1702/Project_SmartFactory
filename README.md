@@ -58,7 +58,7 @@
 
 ### [로봇 팔](Robot_arm)
 ### [컨베이어 벨트 & 카메라](conveyor)
-### [컨트롤 서버](server)
+### [컨트롤 서버](gateway)
 
 ## 발표 자료
 ### [발표 자료 바로 가기](Project_SmartFactory.pdf)
