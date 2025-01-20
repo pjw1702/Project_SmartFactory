@@ -428,7 +428,7 @@ $ uname -a
 Linux pi14 6.6.70-v7l+ #1 SMP Sun Jan 12 21:19:39 KST 2025 armv7l GNU/Linux
 ```
 
-만일 지원하는 버전과 다른 버전의 커널에서 드라이버를 적재하려 하면, 아래와 같은 에러가 발생합니다.
+만일 지원하는 버전과 다른 버전의 커널에서 모듈을 적재하려 하면, 아래와 같은 에러가 발생합니다.
 ```bash
 $ cd wifi_health/module
 $ sudo insmod nexusmeshx.ko
